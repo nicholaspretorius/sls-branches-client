@@ -1,3 +1,14 @@
+# Branches Client
+
+## Running locally
+
+* `npm start`
+
+Note the app runs on PORT 3001, see [http://localhost:3001](http://localhost:3001)
+
+
+## Create React App Notes
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
