@@ -4,7 +4,14 @@
 
 * `npm start`
 
-Note the app runs on PORT 3001, see [http://localhost:3001](http://localhost:3001)
+Note the app runs on PORT 3001, see [http://localhost:3001](http://localhost:3001).
+
+## Tests
+
+Tests are written with Jest and React Testing Library. 
+
+* Run tests with: `npm test`
+* Run tests with coverage: `npm run test:cov`
 
 
 ## Create React App Notes
