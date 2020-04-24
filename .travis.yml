@@ -1,0 +1,29 @@
+language: node_js
+node_js:
+  - 12.16.2
+
+addons:
+apt:
+  packages:
+    - libgconf-2-4
+
+cache:
+  npm: true
+  directories:
+    - "~/.cache"
+
+install:
+  - npm ci
+  - npm install wait-on
+
+script:
+  - npm test:cov
+  - npm start & wait-on http://localhost:3001 &
+  - npm test:e2e
+  - npm build
+  - kill $(jobs -p) || true
+deploy:
+  provider: heroku
+  app: branches-client
+  api_key:
+    secure: om32TZ36e3wxWIXfP189oNxhvW1iBrNWSdxb71nuUO5H//k21+FQK8fqB6rMTRinjMd+ohnsByrVhTTDLdYsTOa1yAIQ534jCk1Lvs4USapbSMoIT5BjnBv7YQXlcDxiaBkjL++36aMwwdQUegoo/r8njBkSRe7t0LInOI73rCw/nJ6rkbqgGcUQvJX5hE2LjBe57N4HOcT3JtOcuQvHhJDiAnqsMIN7KBWsDD0ua6iOka6BwwFD43wxb0qipPQ7tjNNEI2NIkD1ixktmYleaV4UNj/rwtk3aHHSw8SI1fZDYy3cdDno/5brodn1Aygx7Kks76368s6HcwIho89NW28GrK8zZX5sXWQkprrNEoY2404MBJmZRXBhoSSG0hf5cvn9Cwsvild9klZ7nE8tSSCznrKXvVU4B/uQZMVq+qKgT5rLW2csPEWyizSTEXNxGpzwVSrA6zlRZe5mFRXuwVjljwsg77QWesToUTBWu4ALAHdMON4dPiSVjwzEbl1JFqSGkToBvqG+9ICm52nPkls0hChndXOWVMMoe4HPfDYuodZ2O2NZxEdnG7iAXYlRqdNe+VNzQUmHzEsxz1NoVaKY8sbXNH9Px3u6iIvWtxkgJIA91XnU+E5DEC3IfRohEOzLcevXC5cRzKV1562P+TE19TKgOW84PNSUzaPKBhU=
