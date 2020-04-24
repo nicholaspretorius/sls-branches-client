@@ -7,13 +7,13 @@ apt:
   packages:
     - libgconf-2-4
 
-cache:
-  npm: true
-  directories:
-    - "~/.cache"
+# cache:
+#   npm: true
+#   directories:
+#     - "~/.cache"
 
 install:
-  - npm install
+  - npm ci
   - npm install wait-on
 
 script:
