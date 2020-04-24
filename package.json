@@ -45,7 +45,7 @@
     "@types/react-dom": "^16.9.6",
     "@types/react-router-dom": "^5.1.4",
     "cypress": "^4.4.1",
-    "webpack": "^4.43.0"
+    "webpack": "^4.42.0"
   },
   "jest": {
     "collectCoverageFrom": [

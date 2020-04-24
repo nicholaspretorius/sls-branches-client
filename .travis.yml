@@ -13,7 +13,7 @@ cache:
     - "~/.cache"
 
 install:
-  - npm ci
+  - npm install
   - npm install wait-on
 
 script:
