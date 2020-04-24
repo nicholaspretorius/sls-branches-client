@@ -3,14 +3,14 @@ node_js:
   - 12.16.2
 
 addons:
-apt:
-  packages:
-    - libgconf-2-4
+  apt:
+    packages:
+      - libgconf-2-4
 
-# cache:
-#   npm: true
-#   directories:
-#     - "~/.cache"
+cache:
+  npm: true
+  directories:
+    - "~/.cache"
 
 install:
   - npm ci
@@ -18,7 +18,7 @@ install:
 
 script:
   - npm run test
-  - npm start && wait-on http://localhost:3001 &
+  - npm run dev && wait-on http://localhost:3001 &
   - $(npm bin)/cypress run
   - npm run build
   - kill $(jobs -p) || true
