@@ -17,10 +17,10 @@ install:
   - npm install wait-on
 
 script:
-  - npm test:cov
+  - npm run test:cov
   - npm start & wait-on http://localhost:3001 &
-  - npm test:e2e
-  - npm build
+  - npm run test:e2e
+  - npm run build
   - kill $(jobs -p) || true
 deploy:
   provider: heroku
