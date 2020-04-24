@@ -2,7 +2,7 @@
 
 ## Running locally
 
-* `npm start`
+* `npm run dev`
 
 Note the app runs on PORT 3001, see [http://localhost:3001](http://localhost:3001).
 
@@ -12,7 +12,13 @@ Tests are written with Jest and React Testing Library.
 
 * Run tests with: `npm test`
 * Run tests with coverage: `npm run test:cov`
+* Run e2e tests with: `npm run test:e2e`
 
+## Heroku
+
+* `heroku git:remote -a branches-client` - adds remote for existing app named "branches-client" to local git.
+* `git push heroku` - push all branches to heroku
+* `git push heroku dev:master` - will push the "dev" branch to Heroku master
 
 ## Create React App Notes
 
