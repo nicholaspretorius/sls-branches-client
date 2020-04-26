@@ -5,6 +5,27 @@ exports[`App renders 1`] = `
   <div
     class="App"
   >
+    <nav
+      class="main_nav"
+    >
+      <h1>
+        Default App Name
+      </h1>
+      <ul>
+        <li>
+          Home
+        </li>
+        <li>
+          About
+        </li>
+        <li>
+          Register
+        </li>
+        <li>
+          Login
+        </li>
+      </ul>
+    </nav>
     <header
       class="App-header"
     >
