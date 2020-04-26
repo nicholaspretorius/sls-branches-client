@@ -1,9 +1,12 @@
 import React from "react";
 import "./App.css";
 
-function App() {
+import Header from "../../components/Header/Header";
+
+const App: React.FC = () => {
   return (
     <div className="App">
+      <Header />
       <header className="App-header">
         <p>Hello world!</p>
       </header>
@@ -12,6 +15,6 @@ function App() {
       </section>
     </div>
   );
-}
+};
 
 export default App;
