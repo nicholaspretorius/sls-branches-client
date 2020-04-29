@@ -1,17 +1,15 @@
 import React from "react";
+import Header from "../../components/Header/Header";
+import Routes from "../../Routes";
 import "./App.css";
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>Hello world!</p>
-      </header>
-      <section>
-        <p>Can you see me?</p>
-      </section>
+    <div className="App container">
+      <Header title="Branchly" />
+      <Routes />
     </div>
   );
-}
+};
 
 export default App;
