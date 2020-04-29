@@ -1,5 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Auth } from "aws-amplify";
+import { Link, useHistory } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 import { Navbar, Nav, NavItem } from "react-bootstrap";
 
@@ -11,11 +12,16 @@ type Props = {
 };
 
 const Header: React.SFC<Props> = ({ title = "Default App Name" }: Props) => {
+  const history = useHistory();
   const { isAuthenticated, userHasAuthenticated } = useAppContext();
   console.log("isAuth? ", isAuthenticated);
 
-  function handleLogout() {
+  async function handleLogout() {
+    await Auth.signOut();
+
     userHasAuthenticated(false);
+
+    history.push("/login");
   }
 
   return (
