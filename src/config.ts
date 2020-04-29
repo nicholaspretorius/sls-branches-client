@@ -1,16 +1,16 @@
 export default {
   s3: {
-    REGION: "YOUR_S3_UPLOADS_BUCKET_REGION",
-    BUCKET: "YOUR_S3_UPLOADS_BUCKET_NAME",
+    REGION: "eu-west-1",
+    BUCKET: "ncp-branches-entities-uploads-bucket-dev",
   },
   apiGateway: {
-    REGION: "eu-west1",
+    REGION: "eu-west-1",
     URL: "https://eolgsqft2g.execute-api.eu-west-1.amazonaws.com/dev/",
   },
   cognito: {
-    REGION: "YOUR_COGNITO_REGION",
-    USER_POOL_ID: "YOUR_COGNITO_USER_POOL_ID",
-    APP_CLIENT_ID: "YOUR_COGNITO_APP_CLIENT_ID",
-    IDENTITY_POOL_ID: "YOUR_IDENTITY_POOL_ID",
+    REGION: "eu-west-1",
+    USER_POOL_ID: "eu-west-1_VR5HeZzqs",
+    APP_CLIENT_ID: "aobvt06f3sve6l6lljl1q5o88",
+    IDENTITY_POOL_ID: "eu-west-1:21c78078-b026-4844-ab66-a76f9679289d",
   }
 };

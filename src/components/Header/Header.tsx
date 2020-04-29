@@ -1,7 +1,9 @@
-import * as React from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 import { Navbar, Nav, NavItem } from "react-bootstrap";
+
+import { useAppContext } from "../../libs/context";
 import "./Header.css";
 
 type Props = {
@@ -9,6 +11,13 @@ type Props = {
 };
 
 const Header: React.SFC<Props> = ({ title = "Default App Name" }: Props) => {
+  const { isAuthenticated, userHasAuthenticated } = useAppContext();
+  console.log("isAuth? ", isAuthenticated);
+
+  function handleLogout() {
+    userHasAuthenticated(false);
+  }
+
   return (
     <Navbar expand="lg">
       <Navbar.Brand>
@@ -17,12 +26,18 @@ const Header: React.SFC<Props> = ({ title = "Default App Name" }: Props) => {
       <Navbar.Toggle />
       <Navbar.Collapse>
         <Nav className="ml-auto">
-          <LinkContainer to="/register">
-            <NavItem>Register</NavItem>
-          </LinkContainer>
-          <LinkContainer to="/login">
-            <NavItem>Login</NavItem>
-          </LinkContainer>
+          {isAuthenticated ? (
+            <NavItem onClick={handleLogout}>Logout</NavItem>
+          ) : (
+            <>
+              <LinkContainer to="/register">
+                <NavItem>Register</NavItem>
+              </LinkContainer>
+              <LinkContainer to="/login">
+                <NavItem>Login</NavItem>
+              </LinkContainer>
+            </>
+          )}
         </Nav>
       </Navbar.Collapse>
     </Navbar>
