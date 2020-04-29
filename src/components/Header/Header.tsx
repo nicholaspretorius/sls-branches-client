@@ -5,6 +5,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { Navbar, Nav, NavItem } from "react-bootstrap";
 
 import { useAppContext } from "../../libs/context";
+import { onError } from "../../libs/error";
 import "./Header.css";
 
 type Props = {
@@ -17,11 +18,13 @@ const Header: React.SFC<Props> = ({ title = "Default App Name" }: Props) => {
   console.log("isAuth? ", isAuthenticated);
 
   async function handleLogout() {
-    await Auth.signOut();
-
-    userHasAuthenticated(false);
-
-    history.push("/login");
+    try {
+      await Auth.signOut();
+      userHasAuthenticated(false);
+      history.push("/login");
+    } catch (error) {
+      onError(error);
+    }
   }
 
   return (

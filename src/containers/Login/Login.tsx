@@ -5,6 +5,7 @@ import { Form } from "react-bootstrap";
 
 import { useAppContext } from "../../libs/context";
 import LoadingButton from "../../components/LoadingButton/LoadingButton";
+import { onError } from "../../libs/error";
 import "./Login.css";
 
 export default function Login() {
@@ -28,7 +29,7 @@ export default function Login() {
       setIsLoading(false);
       history.push("/");
     } catch (e) {
-      alert(e.message);
+      onError(e);
       setIsLoading(false);
     }
   }
