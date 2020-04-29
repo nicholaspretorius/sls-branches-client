@@ -1,3 +1,12 @@
 .App .navbar-brand {
   font-weight: bold;
 }
+
+.nav-item {
+  margin-right: 1em;
+  cursor: pointer;
+}
+
+.nav-item.active {
+  font-weight: bold;
+}

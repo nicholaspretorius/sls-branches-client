@@ -6,11 +6,11 @@ import App from "./containers/App/App";
 // import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Router>
-      <App />
-    </Router>
-  </React.StrictMode>,
+  // <React.StrictMode>
+  <Router>
+    <App />
+  </Router>,
+  // </React.StrictMode>,
   document.getElementById("root")
 );
 
