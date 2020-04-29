@@ -1,5 +1,6 @@
 import * as React from "react";
-
+import { Link } from "react-router-dom";
+import { Navbar } from "react-bootstrap";
 import "./Header.css";
 
 type Props = {
@@ -8,15 +9,12 @@ type Props = {
 
 const Header: React.SFC<Props> = ({ title = "Default App Name" }: Props) => {
   return (
-    <nav className="main_nav">
-      <h1>{title}</h1>
-      <ul>
-        <li>Home</li>
-        <li>About</li>
-        <li>Register</li>
-        <li>Login</li>
-      </ul>
-    </nav>
+    <Navbar collapseOnSelect>
+      <Navbar.Brand>
+        <Link to="/">{title}</Link>
+      </Navbar.Brand>
+      <Navbar.Toggle />
+    </Navbar>
   );
 };
 

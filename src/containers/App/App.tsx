@@ -5,14 +5,11 @@ import Header from "../../components/Header/Header";
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <Header />
+    <div className="App container">
+      <Header title="Branchly" />
       <header className="App-header">
         <p>Hello world!</p>
       </header>
-      <section>
-        <p>Can you see me?</p>
-      </section>
     </div>
   );
 };

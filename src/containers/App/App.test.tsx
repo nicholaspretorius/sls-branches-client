@@ -1,16 +1,16 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import renderWithRouter from "../../setupTests";
 import App from "./App";
 
 describe("App", () => {
-  it("renders learn react link", () => {
-    const { getByText } = render(<App />);
+  it("renders 'Hello world!'", () => {
+    const { getByText } = renderWithRouter(<App />);
     const linkElement = getByText("Hello world!");
-    expect(linkElement).toBeInTheDocument();
+    expect(linkElement).toBeDefined();
   });
 
   it("renders", () => {
-    const { asFragment } = render(<App />);
+    const { asFragment } = renderWithRouter(<App />);
     expect(asFragment()).toMatchSnapshot();
   });
 });
