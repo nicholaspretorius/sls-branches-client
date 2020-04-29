@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@types/react-router-bootstrap": "^0.24.5",
+    "aws-amplify": "^3.0.9",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
