@@ -1,4 +1,5 @@
 import React from "react";
+import { Auth } from "aws-amplify";
 import { Link } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 import { Navbar, Nav, NavItem } from "react-bootstrap";
@@ -14,7 +15,9 @@ const Header: React.SFC<Props> = ({ title = "Default App Name" }: Props) => {
   const { isAuthenticated, userHasAuthenticated } = useAppContext();
   console.log("isAuth? ", isAuthenticated);
 
-  function handleLogout() {
+  async function handleLogout() {
+    await Auth.signOut();
+
     userHasAuthenticated(false);
   }
 
