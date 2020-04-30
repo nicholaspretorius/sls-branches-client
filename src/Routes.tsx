@@ -4,6 +4,9 @@ import Home from "./containers/Home/Home";
 import NotFound from "./containers/NotFound/NotFound";
 import Login from "./containers/Login/Login";
 import Register from "./containers/Register/Register";
+import NewEntity from "./containers/NewEntity/NewEntity";
+import Dashboard from "./containers/Dashboard/Dashboard";
+import Entity from "./containers/Entity/Entity";
 
 export default function Routes() {
   return (
@@ -16,6 +19,15 @@ export default function Routes() {
       </Route>
       <Route exact path="/register">
         <Register />
+      </Route>
+      <Route exact path="/dashboard">
+        <Dashboard />
+      </Route>
+      <Route exact path="/entities/new">
+        <NewEntity />
+      </Route>
+      <Route exact path="/entities/:id">
+        <Entity />
       </Route>
       <Route>
         <NotFound />

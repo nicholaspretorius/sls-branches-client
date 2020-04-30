@@ -34,7 +34,7 @@ export default function Login() {
       await Auth.signIn(email, password);
       userHasAuthenticated(true);
       setIsLoading(false);
-      history.push("/");
+      history.push("/dashboard");
     } catch (e) {
       onError(e);
       setIsLoading(false);

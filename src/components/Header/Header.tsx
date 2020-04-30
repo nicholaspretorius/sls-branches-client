@@ -30,7 +30,7 @@ const Header: React.SFC<Props> = ({ title = "Default App Name" }: Props) => {
   return (
     <Navbar expand="lg">
       <Navbar.Brand>
-        <Link to="/">{title}</Link>
+        {!isAuthenticated ? <Link to="/">{title}</Link> : <Link to="/dashboard">{title}</Link>}
       </Navbar.Brand>
       <Navbar.Toggle />
       <Navbar.Collapse>
