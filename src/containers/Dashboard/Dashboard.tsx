@@ -5,28 +5,8 @@ import { LinkContainer } from "react-router-bootstrap";
 
 import { useAppContext } from "../../libs/context";
 import { onError } from "../../libs/error";
+import { IEntity } from "../../models/interfaces";
 import "./Dashboard.css";
-
-export interface Contact {
-  contactType: string;
-  contactHandle: string;
-}
-
-export interface Country {
-  countryCode: string;
-  countryName: string;
-  countryId?: string;
-}
-
-export interface Entity {
-  entityId: string;
-  userId: string;
-  createdAt: string;
-  updatedAt: string;
-  name: string;
-  country: Country;
-  contacts: Contact[];
-}
 
 export default function Dashboard() {
   const [entities, setEntities] = useState([]);
@@ -56,12 +36,12 @@ export default function Dashboard() {
     return API.get("branches", "/entities", {});
   }
 
-  function renderEntitiesList(entities: Entity[]) {
+  function renderEntitiesList(entities: IEntity[]) {
     return [{}].concat(entities).map((entity: any, i) =>
       i !== 0 ? (
         <LinkContainer key={entity.entityId} to={`/entities/${entity.entityId}`}>
           <ListGroup.Item>
-            {entity.name.trim().split("\n")[0]}
+            <p>{entity.name.trim().split("\n")[0]}</p>
             <span>{"Created: " + new Date(entity.createdAt).toLocaleString()}</span>
           </ListGroup.Item>
         </LinkContainer>
@@ -80,7 +60,7 @@ export default function Dashboard() {
   return (
     <div className="Dashboard">
       <h3>Dashboard</h3>
-      <ListGroup>{!isLoading && renderEntitiesList(entities)}</ListGroup>
+      <ListGroup className="entities">{!isLoading && renderEntitiesList(entities)}</ListGroup>
     </div>
   );
 }
