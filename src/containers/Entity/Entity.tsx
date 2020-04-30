@@ -27,10 +27,12 @@ export default function Entity() {
     async function onLoad() {
       try {
         const entity = await loadEntity();
+        console.log("Entity: ", entity);
         const { name, attachment } = entity;
 
         if (attachment) {
           entity.attachmentURL = await Storage.vault.get(attachment);
+          console.log("Entity: attachmentURL: ", entity);
         }
 
         setName(name);
@@ -80,7 +82,7 @@ export default function Entity() {
 
       await saveEntity({
         name,
-        attachment: attachment, // || name.attachment
+        attachment: attachment || entity!.attachment,
       });
       history.push("/dashboard");
     } catch (e) {
@@ -122,12 +124,12 @@ export default function Entity() {
           </Form.Group>
           {entity.attachment && (
             <Form.Group>
-              <Form.Label>Attachment</Form.Label>
-              <Form.Control>
-                <a target="_blank" rel="noopener noreferrer" href={entity.attachmentURL}>
-                  {formatFilename(entity.attachment)}
-                </a>
-              </Form.Control>
+              <Form.Label>Attachment: </Form.Label>
+              {/* <FormControl> */}
+              <a target="_blank" rel="noopener noreferrer" href={entity.attachmentURL}>
+                {formatFilename(entity.attachment)}
+              </a>
+              {/* </FormControl> */}
             </Form.Group>
           )}
           <Form.Group controlId="file">
