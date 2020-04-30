@@ -5,6 +5,7 @@ import { API, Storage } from "aws-amplify";
 
 import LoadingButton from "../../components/LoadingButton/LoadingButton";
 import { onError } from "../../libs/error";
+import { s3Upload } from "../../libs/aws";
 import config from "../../config";
 import { IEntity } from "../../models/interfaces";
 
@@ -54,6 +55,12 @@ export default function Entity() {
     file.current = event.target.files[0];
   }
 
+  function saveEntity(entity: any) {
+    return API.put("branches", `/entities/${id}`, {
+      body: entity,
+    });
+  }
+
   async function handleSubmit(event: any) {
     let attachment;
 
@@ -65,6 +72,25 @@ export default function Entity() {
     }
 
     setIsLoading(true);
+
+    try {
+      if (file.current) {
+        attachment = await s3Upload(file.current);
+      }
+
+      await saveEntity({
+        name,
+        attachment: attachment, // || name.attachment
+      });
+      history.push("/dashboard");
+    } catch (e) {
+      onError(e);
+      setIsLoading(false);
+    }
+  }
+
+  function deleteEntity() {
+    return API.del("branches", `/entities/${id}`, {});
   }
 
   async function handleDelete(event: any) {
@@ -77,6 +103,14 @@ export default function Entity() {
     }
 
     setIsDeleting(true);
+
+    try {
+      await deleteEntity();
+      history.push("/dashboard");
+    } catch (e) {
+      onError(e);
+      setIsDeleting(false);
+    }
   }
 
   return (
@@ -104,7 +138,7 @@ export default function Entity() {
             block
             type="submit"
             bssize="large"
-            bsstyle="primary"
+            variant="primary"
             isLoading={isLoading}
             disabled={!validateForm()}
           >
@@ -113,7 +147,7 @@ export default function Entity() {
           <LoadingButton
             block
             bssize="large"
-            bsstyle="danger"
+            variant="danger"
             onClick={handleDelete}
             isLoading={isDeleting}
           >
