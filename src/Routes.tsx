@@ -8,6 +8,8 @@ import NewEntity from "./containers/NewEntity/NewEntity";
 import Dashboard from "./containers/Dashboard/Dashboard";
 import Entity from "./containers/Entity/Entity";
 import Settings from "./containers/Settings/Settings";
+import AuthenticatedRoute from "./components/AuthenticatedRoute";
+import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
 
 export default function Routes() {
   return (
@@ -15,24 +17,24 @@ export default function Routes() {
       <Route exact path="/">
         <Home />
       </Route>
-      <Route exact path="/login">
+      <UnauthenticatedRoute exact path="/login">
         <Login />
-      </Route>
-      <Route exact path="/register">
+      </UnauthenticatedRoute>
+      <UnauthenticatedRoute exact path="/register">
         <Register />
-      </Route>
-      <Route exact path="/dashboard">
+      </UnauthenticatedRoute>
+      <AuthenticatedRoute exact path="/dashboard">
         <Dashboard />
-      </Route>
-      <Route exact path="/entities/new">
+      </AuthenticatedRoute>
+      <AuthenticatedRoute exact path="/entities/new">
         <NewEntity />
-      </Route>
-      <Route exact path="/entities/:id">
+      </AuthenticatedRoute>
+      <AuthenticatedRoute exact path="/entities/:id">
         <Entity />
-      </Route>
-      <Route exact path="/settings">
+      </AuthenticatedRoute>
+      <AuthenticatedRoute exact path="/settings">
         <Settings />
-      </Route>
+      </AuthenticatedRoute>
       <Route>
         <NotFound />
       </Route>
