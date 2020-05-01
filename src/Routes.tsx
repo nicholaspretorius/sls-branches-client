@@ -1,5 +1,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
+import AuthenticatedRoute from "./components/AuthenticatedRoute";
+import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
 import Home from "./containers/Home/Home";
 import NotFound from "./containers/NotFound/NotFound";
 import Login from "./containers/Login/Login";
@@ -8,6 +10,10 @@ import NewEntity from "./containers/NewEntity/NewEntity";
 import Dashboard from "./containers/Dashboard/Dashboard";
 import Entity from "./containers/Entity/Entity";
 import Settings from "./containers/Settings/Settings";
+import Billing from "./containers/Billing/Billing";
+import ForgotPassword from "./containers/ForgotPassword/ForgotPassword";
+import ChangePassword from "./containers/ChangePassword/ChangePassword";
+import ChangeEmail from "./containers/ChangeEmail/ChangeEmail";
 
 export default function Routes() {
   return (
@@ -15,24 +21,36 @@ export default function Routes() {
       <Route exact path="/">
         <Home />
       </Route>
-      <Route exact path="/login">
+      <UnauthenticatedRoute exact path="/login">
         <Login />
-      </Route>
-      <Route exact path="/register">
+      </UnauthenticatedRoute>
+      <UnauthenticatedRoute exact path="/register">
         <Register />
-      </Route>
-      <Route exact path="/dashboard">
+      </UnauthenticatedRoute>
+      <UnauthenticatedRoute exact path="/login/forgot">
+        <ForgotPassword />
+      </UnauthenticatedRoute>
+      <AuthenticatedRoute exact path="/dashboard">
         <Dashboard />
-      </Route>
-      <Route exact path="/entities/new">
+      </AuthenticatedRoute>
+      <AuthenticatedRoute exact path="/entities/new">
         <NewEntity />
-      </Route>
-      <Route exact path="/entities/:id">
+      </AuthenticatedRoute>
+      <AuthenticatedRoute exact path="/entities/:id">
         <Entity />
-      </Route>
-      <Route exact path="/settings">
+      </AuthenticatedRoute>
+      <AuthenticatedRoute exact path="/settings">
         <Settings />
-      </Route>
+      </AuthenticatedRoute>
+      <AuthenticatedRoute exact path="/settings/billing">
+        <Billing />
+      </AuthenticatedRoute>
+      <AuthenticatedRoute exact path="/settings/password">
+        <ChangePassword />
+      </AuthenticatedRoute>
+      <AuthenticatedRoute exact path="/settings/email">
+        <ChangeEmail />
+      </AuthenticatedRoute>
       <Route>
         <NotFound />
       </Route>

@@ -1,16 +1,10 @@
 @media all and (min-width: 480px) {
-  .Login {
+  .ChangeEmail {
     padding: 60px 0;
   }
 
-  .Login form {
+  .ChangeEmail form {
     margin: 0 auto;
     max-width: 320px;
   }
-}
-
-.Login form a {
-  margin-bottom: 15px;
-  display: block;
-  font-size: 14px;
 }
