@@ -5,7 +5,7 @@ export default {
   },
   apiGateway: {
     REGION: "eu-west-1",
-    URL: "https://eolgsqft2g.execute-api.eu-west-1.amazonaws.com/dev/",
+    URL: "https://eolgsqft2g.execute-api.eu-west-1.amazonaws.com/dev",
   },
   cognito: {
     REGION: "eu-west-1",
@@ -14,4 +14,5 @@ export default {
     IDENTITY_POOL_ID: "eu-west-1:21c78078-b026-4844-ab66-a76f9679289d",
   },
   MAX_ATTACHMENT_SIZE: 5000000,
+  STRIPE_KEY: "pk_test_BV8mIlA2bgaja47OFh0nb5eN007eCzJEbN",
 };

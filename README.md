@@ -20,6 +20,15 @@ Tests are written with Jest and React Testing Library.
 * `git push heroku` - push all branches to heroku
 * `git push heroku dev:master` - will push the "dev" branch to Heroku master
 
+## API
+
+The API is running at [https://eolgsqft2g.execute-api.eu-west-1.amazonaws.com/dev](https://eolgsqft2g.execute-api.eu-west-1.amazonaws.com/dev/)
+
+## Stripe
+
+Use "Card Number" of `4242 4242 4242 4242` with any other data to make a purchase.
+
+
 ## Create React App Notes
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
