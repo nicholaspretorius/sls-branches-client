@@ -30,10 +30,15 @@ const Header: React.SFC<Props> = ({ title = "Default App Name" }: Props) => {
   return (
     <Navbar expand="lg">
       <Navbar.Brand>
-        {!isAuthenticated ? <Link to="/">{title}</Link> : <Link to="/dashboard">{title}</Link>}
+        <Link to="/">{title}</Link>
       </Navbar.Brand>
       <Navbar.Toggle />
       <Navbar.Collapse>
+        <Nav>
+          <LinkContainer to="/dashboard">
+            <NavItem>Dashboard</NavItem>
+          </LinkContainer>
+        </Nav>
         <Nav className="ml-auto">
           {isAuthenticated ? (
             <>
