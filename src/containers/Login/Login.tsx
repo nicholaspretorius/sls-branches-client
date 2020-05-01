@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Auth } from "aws-amplify";
+import { Link } from "react-router-dom";
 // import { useHistory } from "react-router-dom";
 import { Form } from "react-bootstrap";
 
@@ -56,6 +57,7 @@ export default function Login() {
             type="password"
           ></Form.Control>
         </Form.Group>
+        <Link to="/login/forgot">Forgot password?</Link>
         <LoadingButton
           block
           size="lg"

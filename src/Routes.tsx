@@ -1,5 +1,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
+import AuthenticatedRoute from "./components/AuthenticatedRoute";
+import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
 import Home from "./containers/Home/Home";
 import NotFound from "./containers/NotFound/NotFound";
 import Login from "./containers/Login/Login";
@@ -8,8 +10,7 @@ import NewEntity from "./containers/NewEntity/NewEntity";
 import Dashboard from "./containers/Dashboard/Dashboard";
 import Entity from "./containers/Entity/Entity";
 import Settings from "./containers/Settings/Settings";
-import AuthenticatedRoute from "./components/AuthenticatedRoute";
-import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
+import ForgotPassword from "./containers/ForgotPassword/ForgotPassword";
 
 export default function Routes() {
   return (
@@ -22,6 +23,9 @@ export default function Routes() {
       </UnauthenticatedRoute>
       <UnauthenticatedRoute exact path="/register">
         <Register />
+      </UnauthenticatedRoute>
+      <UnauthenticatedRoute exact path="/login/forgot">
+        <ForgotPassword />
       </UnauthenticatedRoute>
       <AuthenticatedRoute exact path="/dashboard">
         <Dashboard />
