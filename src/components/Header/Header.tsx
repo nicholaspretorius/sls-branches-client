@@ -34,11 +34,13 @@ const Header: React.SFC<Props> = ({ title = "Default App Name" }: Props) => {
       </Navbar.Brand>
       <Navbar.Toggle />
       <Navbar.Collapse>
-        <Nav>
-          <LinkContainer to="/dashboard">
-            <NavItem>Dashboard</NavItem>
-          </LinkContainer>
-        </Nav>
+        {isAuthenticated && (
+          <Nav>
+            <LinkContainer to="/dashboard">
+              <NavItem>Dashboard</NavItem>
+            </LinkContainer>
+          </Nav>
+        )}
         <Nav className="ml-auto">
           {isAuthenticated ? (
             <>

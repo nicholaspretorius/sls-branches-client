@@ -5,6 +5,7 @@ import { AppContext } from "../../libs/context";
 import Header from "../../components/Header/Header";
 import Routes from "../../Routes";
 import { onError } from "../../libs/error";
+import ErrorBoundary from "../../components/ErrorBoundary/ErrorBoundary";
 
 import "./App.css";
 
@@ -31,10 +32,12 @@ const App = () => {
 
   return !isAuthenticating ? (
     <div className="App container">
-      <AppContext.Provider value={{ isAuthenticated, userHasAuthenticated }}>
-        <Header title="Branchly" />
-        <Routes />
-      </AppContext.Provider>
+      <ErrorBoundary>
+        <AppContext.Provider value={{ isAuthenticated, userHasAuthenticated }}>
+          <Header title="Branchly" />
+          <Routes />
+        </AppContext.Provider>
+      </ErrorBoundary>
     </div>
   ) : (
     <div>

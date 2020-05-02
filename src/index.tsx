@@ -5,7 +5,10 @@ import { Amplify } from "aws-amplify";
 
 import App from "./containers/App/App";
 import config from "./config";
+import { initSentry } from "./libs/error";
 import "./index.css";
+
+initSentry();
 // import * as serviceWorker from "./serviceWorker";
 
 Amplify.configure({
