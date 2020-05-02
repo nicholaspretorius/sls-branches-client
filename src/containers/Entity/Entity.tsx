@@ -99,7 +99,7 @@ export default function Entity() {
             contactHandle: email,
           },
         ],
-        attachment,
+        attachment: attachment || attach,
         attachmentURL,
       };
 
