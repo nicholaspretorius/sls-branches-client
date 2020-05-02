@@ -15,7 +15,6 @@ type Props = {
 const Header: React.SFC<Props> = ({ title = "Default App Name" }: Props) => {
   const history = useHistory();
   const { isAuthenticated, userHasAuthenticated } = useAppContext();
-  console.log("isAuth? ", isAuthenticated);
 
   async function handleLogout() {
     try {

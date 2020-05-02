@@ -44,7 +44,6 @@ export default function NewEntity() {
       const attachment = file.current ? await s3Upload(file.current) : null;
 
       const country = countries.filter((country) => country.countryName === country_name);
-      console.log("Country: ", country);
 
       const newEntity = {
         name,
