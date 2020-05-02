@@ -6,7 +6,6 @@ import { API, Storage } from "aws-amplify";
 import LoadingButton from "../../components/LoadingButton/LoadingButton";
 import { onError } from "../../libs/error";
 import { s3Upload } from "../../libs/aws";
-// import { useFormFields } from "../../libs/hooks";
 import config from "../../config";
 import { countries, countryList } from "../../models/data";
 import { IEntity } from "../../models/interfaces";
@@ -33,12 +32,10 @@ export default function Entity() {
     async function onLoad() {
       try {
         const entity = await loadEntity();
-        console.log("Entity: ", entity);
         const { attachment } = entity;
 
         if (attachment) {
           entity.attachmentURL = await Storage.vault.get(attachment);
-          console.log("Entity: attachmentURL: ", entity);
         }
 
         setEntity(entity);
