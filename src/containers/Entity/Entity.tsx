@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, FormEvent } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { Form } from "react-bootstrap";
 import { API, Storage } from "aws-amplify";
@@ -6,7 +6,9 @@ import { API, Storage } from "aws-amplify";
 import LoadingButton from "../../components/LoadingButton/LoadingButton";
 import { onError } from "../../libs/error";
 import { s3Upload } from "../../libs/aws";
+// import { useFormFields } from "../../libs/hooks";
 import config from "../../config";
+import { countries, countryList } from "../../models/data";
 import { IEntity } from "../../models/interfaces";
 
 export default function Entity() {
@@ -14,8 +16,12 @@ export default function Entity() {
   const { id } = useParams();
   const history = useHistory();
 
-  const [entity, setEntity] = useState<IEntity | null>(null);
   const [name, setName] = useState("");
+  const [country_name, setCountryName] = useState("");
+  const [email, setEmail] = useState("");
+  const [attachment, setAttachment] = useState("");
+  const [attachmentURL, setAttachmentURL] = useState("");
+  const [entity, setEntity] = useState<IEntity | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -28,15 +34,19 @@ export default function Entity() {
       try {
         const entity = await loadEntity();
         console.log("Entity: ", entity);
-        const { name, attachment } = entity;
+        const { attachment } = entity;
 
         if (attachment) {
           entity.attachmentURL = await Storage.vault.get(attachment);
           console.log("Entity: attachmentURL: ", entity);
         }
 
-        setName(name);
         setEntity(entity);
+        setName(entity.name);
+        setCountryName(entity.country[0].countryName);
+        setAttachmentURL(entity.attachmentURL);
+        setAttachment(entity.attachment);
+        setEmail(entity.contacts[0].contactHandle);
       } catch (e) {
         onError(e);
       }
@@ -63,8 +73,8 @@ export default function Entity() {
     });
   }
 
-  async function handleSubmit(event: any) {
-    let attachment;
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    let attach;
 
     event.preventDefault();
 
@@ -77,13 +87,26 @@ export default function Entity() {
 
     try {
       if (file.current) {
-        attachment = await s3Upload(file.current);
+        attach = await s3Upload(file.current);
+        console.log("File/Attach: ", attach);
       }
 
-      await saveEntity({
+      const selectedCountry = countries.filter((c) => c.countryName === country_name);
+
+      const updateEntity = {
         name,
-        attachment: attachment || entity!.attachment,
-      });
+        country: selectedCountry,
+        contacts: [
+          {
+            contactType: "email",
+            contactHandle: email,
+          },
+        ],
+        attachment,
+        attachmentURL,
+      };
+
+      await saveEntity(updateEntity);
       history.push("/dashboard");
     } catch (e) {
       onError(e);
@@ -119,21 +142,42 @@ export default function Entity() {
     <div className="Entity">
       {entity && (
         <form onSubmit={handleSubmit}>
-          <Form.Group controlId="content">
+          {/* <Form.Group controlId="content">
             <Form.Control value={name} as="textarea" onChange={(e) => setName(e.target.value)} />
+          </Form.Group> */}
+          <Form.Group controlId="name">
+            <Form.Label>Name</Form.Label>
+            <Form.Control value={name} onChange={(e) => setName(e.target.value)} type="text" />
+          </Form.Group>
+          <Form.Group controlId="country_name">
+            <Form.Label>Country</Form.Label>
+            <Form.Control
+              as="select"
+              value={country_name}
+              // value={countries.filter((country) => country.countryName === country_name)}
+              onChange={(e) => setCountryName(e.target.value)}
+            >
+              {countryList.map((c) => (
+                <option key={c}>{c}</option>
+              ))}
+            </Form.Control>
+          </Form.Group>
+          <Form.Group controlId="email">
+            <Form.Label>Email</Form.Label>
+            <Form.Control value={email} onChange={(e) => setEmail(e.target.value)} type="email" />
           </Form.Group>
           {entity.attachment && (
             <Form.Group>
               <Form.Label>Attachment: </Form.Label>
               {/* <FormControl> */}
-              <a target="_blank" rel="noopener noreferrer" href={entity.attachmentURL}>
-                {formatFilename(entity.attachment)}
+              <a target="_blank" rel="noopener noreferrer" href={attachmentURL}>
+                {formatFilename(attachment)}
               </a>
               {/* </FormControl> */}
             </Form.Group>
           )}
           <Form.Group controlId="file">
-            {!entity.attachment && <Form.Label>Attachment</Form.Label>}
+            {!attachment && <Form.Label>Attachment</Form.Label>}
             <Form.Control onChange={handleFileChange} type="file" />
           </Form.Group>
           <LoadingButton

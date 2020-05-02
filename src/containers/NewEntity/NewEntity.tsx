@@ -8,6 +8,7 @@ import config from "../../config";
 import { onError } from "../../libs/error";
 import { useFormFields } from "../../libs/hooks";
 import { s3Upload } from "../../libs/aws";
+import { countries } from "../../models/data";
 import "./NewEntity.css";
 
 export default function NewEntity() {
@@ -21,17 +22,6 @@ export default function NewEntity() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const { name, country_name, email } = fields;
-
-  const countries = [
-    {
-      countryName: "South Africa",
-      countryCode: "za",
-    },
-    {
-      countryName: "Germany",
-      countryCode: "de",
-    },
-  ];
 
   function validateForm() {
     return name.length > 0 && country_name.length > 0 && email.length > 0;
