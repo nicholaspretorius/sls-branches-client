@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Auth } from "aws-amplify";
 import { Link } from "react-router-dom";
-// import { useHistory } from "react-router-dom";
 import { Form } from "react-bootstrap";
 
 import { useAppContext } from "../../libs/context";
@@ -11,15 +10,12 @@ import { useFormFields } from "../../libs/hooks";
 import "./Login.css";
 
 export default function Login() {
-  // const history = useHistory();
   const { userHasAuthenticated } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
   const [fields, handleFieldChange] = useFormFields({
     email: "",
     password: "",
   });
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
 
   const { email, password } = fields;
 
@@ -33,9 +29,8 @@ export default function Login() {
 
     try {
       await Auth.signIn(email, password);
-      userHasAuthenticated(true);
       setIsLoading(false);
-      // history.push("/dashboard");
+      userHasAuthenticated(true);
     } catch (e) {
       onError(e);
       setIsLoading(false);
