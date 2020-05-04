@@ -53,7 +53,7 @@ export default function ChangePassword() {
           <Form.Control type="password" onChange={handleFieldChange} value={fields.password} />
         </Form.Group>
         <Form.Group controlId="confirmPassword">
-          <Form.Label>Confirm Password</Form.Label>
+          <Form.Label>Confirm New Password</Form.Label>
           <Form.Control
             type="password"
             onChange={handleFieldChange}

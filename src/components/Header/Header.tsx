@@ -46,7 +46,7 @@ const Header: React.SFC<Props> = ({ user, title = "Default App Name" }: Props) =
             <>
               <Nav.Item>
                 <Nav.Link eventKey="disabled" disabled>
-                  {user.attributes.email}
+                  {user && user.attributes.email}
                 </Nav.Link>
               </Nav.Item>
               <LinkContainer to="/settings">

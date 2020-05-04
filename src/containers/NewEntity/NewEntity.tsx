@@ -71,7 +71,6 @@ export default function NewEntity() {
       const attachment = file.current ? await s3Upload(file.current) : null;
 
       const country = lCountries!.filter((country: any) => country.countryName === country_name);
-      console.log("Country: ", country);
 
       const newEntity = {
         name,
@@ -102,7 +101,7 @@ export default function NewEntity() {
     <div className="NewNote">
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="name">
-          <Form.Label>Name</Form.Label>
+          <Form.Label>Branch Name</Form.Label>
           <Form.Control value={name} onChange={handleFieldChange} type="text" />
         </Form.Group>
         <Form.Group controlId="country_name">
@@ -113,6 +112,7 @@ export default function NewEntity() {
             value={country_name}
             onChange={handleFieldChange}
           >
+            <option>Please select</option>
             {lCountries.map((c: any) => (
               <option key={c.countryCode}>{c.countryName}</option>
             ))}

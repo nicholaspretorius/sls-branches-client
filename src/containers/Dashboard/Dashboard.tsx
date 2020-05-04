@@ -49,7 +49,7 @@ export default function Dashboard() {
         <LinkContainer key="new" to="/entities/new">
           <ListGroup.Item>
             <h4>
-              <b>{"\uFF0B"}</b> Create a new entity
+              <b>{"\uFF0B"}</b> Create a new branch
             </h4>
           </ListGroup.Item>
         </LinkContainer>
@@ -59,7 +59,7 @@ export default function Dashboard() {
 
   return (
     <div className="Dashboard">
-      <h3>Dashboard</h3>
+      {/* <h3>Dashboard</h3> */}
       <ListGroup className="entities">{!isLoading && renderEntitiesList(entities)}</ListGroup>
     </div>
   );
