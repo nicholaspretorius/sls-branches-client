@@ -12,6 +12,7 @@ import "./App.css";
 const App = () => {
   const [isAuthenticated, userHasAuthenticated] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(true);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     onLoad();
@@ -20,6 +21,8 @@ const App = () => {
   async function onLoad() {
     try {
       await Auth.currentSession();
+      const user = await Auth.currentUserInfo();
+      setUser(user);
       userHasAuthenticated(true);
     } catch (e) {
       if (e !== "No current user") {
@@ -34,7 +37,7 @@ const App = () => {
     <div className="App container">
       <ErrorBoundary>
         <AppContext.Provider value={{ isAuthenticated, userHasAuthenticated }}>
-          <Header title="Branchly" />
+          <Header title="Branchly" user={user} />
           <Routes />
         </AppContext.Provider>
       </ErrorBoundary>
