@@ -22,14 +22,13 @@ export default function NewEntity() {
     email: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [restCountries, setRestCountries] = useState<any | null>(null);
+  // const [restCountries, setRestCountries] = useState<any | null>(null);
   const [lCountries, setCountries] = useState<any | any[]>([]);
   const { name, country_name, email } = fields;
 
   useEffect(() => {
     async function loadCountries() {
       const restCountries = await axios.get("https://restcountries.eu/rest/v2/all");
-      console.log("RestCountries: ", restCountries);
 
       return restCountries;
     }
@@ -44,8 +43,7 @@ export default function NewEntity() {
 
         return country;
       });
-      console.log("Countries: ", lCountries);
-      setRestCountries(rCountries.data);
+      // setRestCountries(rCountries.data);
       setCountries(lCountries);
     }
 
@@ -73,7 +71,6 @@ export default function NewEntity() {
       const attachment = file.current ? await s3Upload(file.current) : null;
 
       const country = lCountries!.filter((country: any) => country.countryName === country_name);
-      console.log("Country: ", country);
 
       const newEntity = {
         name,
@@ -104,12 +101,9 @@ export default function NewEntity() {
     <div className="NewNote">
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="name">
-          <Form.Label>Name</Form.Label>
+          <Form.Label>Branch Name</Form.Label>
           <Form.Control value={name} onChange={handleFieldChange} type="text" />
         </Form.Group>
-        {/* <Form.Group controlId="name">
-          <Form.Control value={fields.name} as="textarea" onChange={(e) => setName(e.target.value)} />
-        </Form.Group> */}
         <Form.Group controlId="country_name">
           <Form.Label>Country</Form.Label>
           <Form.Control
@@ -118,6 +112,7 @@ export default function NewEntity() {
             value={country_name}
             onChange={handleFieldChange}
           >
+            <option>Please select</option>
             {lCountries.map((c: any) => (
               <option key={c.countryCode}>{c.countryName}</option>
             ))}

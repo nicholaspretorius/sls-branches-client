@@ -10,3 +10,7 @@
 .nav-item.active {
   font-weight: bold;
 }
+
+.nav-link {
+  padding: 0;
+}

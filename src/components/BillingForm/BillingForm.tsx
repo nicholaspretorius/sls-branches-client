@@ -36,18 +36,18 @@ function BillingForm(props: any) {
   return (
     <Form className="BillingForm" onSubmit={handleSubmitClick}>
       <Form.Group controlId="storage">
-        <Form.Label>Storage</Form.Label>
+        <Form.Label>Number of branches</Form.Label>
         <Form.Control
           min="0"
           type="number"
           value={fields.storage}
           onChange={handleFieldChange}
-          placeholder="Number of entities to store"
+          placeholder="Number of branches to save"
         />
       </Form.Group>
       <hr />
       <Form.Group controlId="name">
-        <Form.Label>Cardholder&apos;s name</Form.Label>
+        <Form.Label>Cardholder Name</Form.Label>
         <Form.Control
           type="text"
           value={fields.name}
@@ -55,7 +55,7 @@ function BillingForm(props: any) {
           placeholder="Name on the card"
         />
       </Form.Group>
-      <Form.Label>Credit Card Info</Form.Label>
+      <Form.Label>Credit Card</Form.Label>
       <CardElement
         className="card-field"
         onChange={(e) => setIsCardComplete(e.complete)}
@@ -64,7 +64,7 @@ function BillingForm(props: any) {
         }}
       />
       <LoadingButton block type="submit" isLoading={isLoading} disabled={!validateForm()}>
-        Purchase
+        Buy
       </LoadingButton>
     </Form>
   );

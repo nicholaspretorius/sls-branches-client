@@ -10,9 +10,10 @@ import "./Header.css";
 
 type Props = {
   title?: string;
+  user?: any;
 };
 
-const Header: React.SFC<Props> = ({ title = "Default App Name" }: Props) => {
+const Header: React.SFC<Props> = ({ user, title = "Default App Name" }: Props) => {
   const history = useHistory();
   const { isAuthenticated, userHasAuthenticated } = useAppContext();
 
@@ -43,6 +44,11 @@ const Header: React.SFC<Props> = ({ title = "Default App Name" }: Props) => {
         <Nav className="ml-auto">
           {isAuthenticated ? (
             <>
+              <Nav.Item>
+                <Nav.Link eventKey="disabled" disabled>
+                  {user && user.attributes.email}
+                </Nav.Link>
+              </Nav.Item>
               <LinkContainer to="/settings">
                 <NavItem>Settings</NavItem>
               </LinkContainer>

@@ -24,7 +24,7 @@ export default function Entity() {
   const [entity, setEntity] = useState<IEntity | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [restCountries, setRestCountries] = useState<any | null>(null);
+  // const [restCountries, setRestCountries] = useState<any | null>(null);
   const [lCountries, setCountries] = useState<any | any[]>([]);
 
   useEffect(() => {
@@ -55,8 +55,7 @@ export default function Entity() {
 
           return country;
         });
-        console.log("Countries: ", lCountries);
-        setRestCountries(rCountries.data);
+        //  setRestCountries(rCountries.data);
         setCountries(lCountries);
 
         setEntity(entity);
@@ -164,7 +163,7 @@ export default function Entity() {
             <Form.Control value={name} as="textarea" onChange={(e) => setName(e.target.value)} />
           </Form.Group> */}
           <Form.Group controlId="name">
-            <Form.Label>Name</Form.Label>
+            <Form.Label>Branch Name</Form.Label>
             <Form.Control value={name} onChange={(e) => setName(e.target.value)} type="text" />
           </Form.Group>
           <Form.Group controlId="country_name">
