@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Form } from "react-bootstrap";
 import { API } from "aws-amplify";
@@ -8,8 +8,9 @@ import config from "../../config";
 import { onError } from "../../libs/error";
 import { useFormFields } from "../../libs/hooks";
 import { s3Upload } from "../../libs/aws";
-import { countries } from "../../models/data";
+// import { countries } from "../../models/data";
 import "./NewEntity.css";
+const axios = require("axios");
 
 export default function NewEntity() {
   const file: any = useRef(null);
@@ -21,7 +22,35 @@ export default function NewEntity() {
     email: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [restCountries, setRestCountries] = useState<any | null>(null);
+  const [lCountries, setCountries] = useState<any | any[]>([]);
   const { name, country_name, email } = fields;
+
+  useEffect(() => {
+    async function loadCountries() {
+      const restCountries = await axios.get("https://restcountries.eu/rest/v2/all");
+      console.log("RestCountries: ", restCountries);
+
+      return restCountries;
+    }
+
+    async function onLoad() {
+      const rCountries = await loadCountries();
+      const lCountries = rCountries.data.map((c: any) => {
+        const country = {
+          countryName: c.name,
+          countryCode: c.alpha2Code,
+        };
+
+        return country;
+      });
+      console.log("Countries: ", lCountries);
+      setRestCountries(rCountries.data);
+      setCountries(lCountries);
+    }
+
+    onLoad();
+  }, []);
 
   function validateForm() {
     return name.length > 0 && country_name.length > 0 && email.length > 0;
@@ -43,7 +72,8 @@ export default function NewEntity() {
     try {
       const attachment = file.current ? await s3Upload(file.current) : null;
 
-      const country = countries.filter((country) => country.countryName === country_name);
+      const country = lCountries!.filter((country: any) => country.countryName === country_name);
+      console.log("Country: ", country);
 
       const newEntity = {
         name,
@@ -82,8 +112,13 @@ export default function NewEntity() {
         </Form.Group> */}
         <Form.Group controlId="country_name">
           <Form.Label>Country</Form.Label>
-          <Form.Control as="select" value={country_name} onChange={handleFieldChange}>
-            {countries.map((c) => (
+          <Form.Control
+            as="select"
+            data-live-search="true"
+            value={country_name}
+            onChange={handleFieldChange}
+          >
+            {lCountries.map((c: any) => (
               <option key={c.countryCode}>{c.countryName}</option>
             ))}
           </Form.Control>

@@ -7,8 +7,9 @@ import LoadingButton from "../../components/LoadingButton/LoadingButton";
 import { onError } from "../../libs/error";
 import { s3Upload } from "../../libs/aws";
 import config from "../../config";
-import { countries, countryList } from "../../models/data";
+// import { countries, countryList } from "../../models/data";
 import { IEntity } from "../../models/interfaces";
+const axios = require("axios");
 
 export default function Entity() {
   const file: any = useRef(null);
@@ -23,10 +24,17 @@ export default function Entity() {
   const [entity, setEntity] = useState<IEntity | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [restCountries, setRestCountries] = useState<any | null>(null);
+  const [lCountries, setCountries] = useState<any | any[]>([]);
 
   useEffect(() => {
     function loadEntity() {
       return API.get("branches", `/entities/${id}`, {});
+    }
+
+    async function loadCountries() {
+      const restCountries = await axios.get("https://restcountries.eu/rest/v2/all");
+      return restCountries;
     }
 
     async function onLoad() {
@@ -37,6 +45,19 @@ export default function Entity() {
         if (attachment) {
           entity.attachmentURL = await Storage.vault.get(attachment);
         }
+
+        const rCountries = await loadCountries();
+        const lCountries = rCountries.data.map((c: any) => {
+          const country = {
+            countryName: c.name,
+            countryCode: c.alpha2Code,
+          };
+
+          return country;
+        });
+        console.log("Countries: ", lCountries);
+        setRestCountries(rCountries.data);
+        setCountries(lCountries);
 
         setEntity(entity);
         setName(entity.name);
@@ -88,7 +109,7 @@ export default function Entity() {
         console.log("File/Attach: ", attach);
       }
 
-      const selectedCountry = countries.filter((c) => c.countryName === country_name);
+      const selectedCountry = lCountries.filter((c: any) => c.countryName === country_name);
 
       const updateEntity = {
         name,
@@ -99,7 +120,7 @@ export default function Entity() {
             contactHandle: email,
           },
         ],
-        attachment: attachment || attach,
+        attachment: attachment || attach || null,
         attachmentURL,
       };
 
@@ -154,8 +175,8 @@ export default function Entity() {
               // value={countries.filter((country) => country.countryName === country_name)}
               onChange={(e) => setCountryName(e.target.value)}
             >
-              {countryList.map((c) => (
-                <option key={c}>{c}</option>
+              {lCountries.map((c: any) => (
+                <option key={c.countryCode}>{c.countryName}</option>
               ))}
             </Form.Control>
           </Form.Group>
