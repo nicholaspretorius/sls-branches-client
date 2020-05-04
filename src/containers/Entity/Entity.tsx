@@ -24,7 +24,7 @@ export default function Entity() {
   const [entity, setEntity] = useState<IEntity | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [restCountries, setRestCountries] = useState<any | null>(null);
+  // const [restCountries, setRestCountries] = useState<any | null>(null);
   const [lCountries, setCountries] = useState<any | any[]>([]);
 
   useEffect(() => {
@@ -55,8 +55,7 @@ export default function Entity() {
 
           return country;
         });
-        console.log("Countries: ", lCountries);
-        setRestCountries(rCountries.data);
+        //  setRestCountries(rCountries.data);
         setCountries(lCountries);
 
         setEntity(entity);
