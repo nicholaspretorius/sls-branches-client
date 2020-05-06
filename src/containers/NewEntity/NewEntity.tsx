@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { Form } from "react-bootstrap";
+import { Form, Row, Col } from "react-bootstrap";
 import { API } from "aws-amplify";
 
 import LoadingButton from "../../components/LoadingButton/LoadingButton";
@@ -8,23 +8,26 @@ import config from "../../config";
 import { onError } from "../../libs/error";
 import { useFormFields } from "../../libs/hooks";
 import { s3Upload } from "../../libs/aws";
-// import { countries } from "../../models/data";
+import { loadEntities } from "../../libs/apiEntities";
 import "./NewEntity.css";
 const axios = require("axios");
 
 export default function NewEntity() {
   const file: any = useRef(null);
   const history = useHistory();
-  // const [name, setName] = useState("");
   const [fields, handleFieldChange] = useFormFields({
     name: "",
+    parent: "",
     country_name: "",
+    lat: "",
+    lng: "",
     email: "",
+    telephone: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  // const [restCountries, setRestCountries] = useState<any | null>(null);
   const [lCountries, setCountries] = useState<any | any[]>([]);
-  const { name, country_name, email } = fields;
+  const [entities, setEntities] = useState<any | any[]>([]);
+  const { name, parent, country_name, email, lat, lng, telephone } = fields;
 
   useEffect(() => {
     async function loadCountries() {
@@ -34,6 +37,7 @@ export default function NewEntity() {
     }
 
     async function onLoad() {
+      const entities = await loadEntities();
       const rCountries = await loadCountries();
       const lCountries = rCountries.data.map((c: any) => {
         const country = {
@@ -43,8 +47,8 @@ export default function NewEntity() {
 
         return country;
       });
-      // setRestCountries(rCountries.data);
       setCountries(lCountries);
+      setEntities(entities);
     }
 
     onLoad();
@@ -72,15 +76,32 @@ export default function NewEntity() {
 
       const country = lCountries!.filter((country: any) => country.countryName === country_name);
 
+      let parentEntity;
+      if (parent) {
+        parentEntity = entities.filter((entity: any) => entity.name === parent)[0];
+        console.log("Parent: ", parentEntity);
+      } else {
+        parentEntity = "";
+      }
+
       const newEntity = {
         name,
+        parentId: parentEntity !== "" ? parentEntity.entityId : "",
         country,
         contacts: [
           {
             contactType: "email",
             contactHandle: email,
           },
+          {
+            contactType: "telephone",
+            contactHandle: telephone,
+          },
         ],
+        location: {
+          lat,
+          lng,
+        },
         attachment,
       };
       await createEntity(newEntity);
@@ -104,14 +125,18 @@ export default function NewEntity() {
           <Form.Label>Branch Name</Form.Label>
           <Form.Control value={name} onChange={handleFieldChange} type="text" />
         </Form.Group>
+        <Form.Group controlId="parent">
+          <Form.Label>Parent Entity</Form.Label>
+          <Form.Control as="select" value={parent} onChange={handleFieldChange}>
+            <option>Please select</option>
+            {entities.map((entity: any) => (
+              <option key={entity.entityId}>{entity.name}</option>
+            ))}
+          </Form.Control>
+        </Form.Group>
         <Form.Group controlId="country_name">
           <Form.Label>Country</Form.Label>
-          <Form.Control
-            as="select"
-            data-live-search="true"
-            value={country_name}
-            onChange={handleFieldChange}
-          >
+          <Form.Control as="select" value={country_name} onChange={handleFieldChange}>
             <option>Please select</option>
             {lCountries.map((c: any) => (
               <option key={c.countryCode}>{c.countryName}</option>
@@ -122,6 +147,34 @@ export default function NewEntity() {
           <Form.Label>Email</Form.Label>
           <Form.Control value={email} onChange={handleFieldChange} type="email" />
         </Form.Group>
+        <Form.Group controlId="telephone">
+          <Form.Label>Telephone</Form.Label>
+          <Form.Control value={telephone} onChange={handleFieldChange} type="tel" />
+        </Form.Group>
+        <Row>
+          <Col>
+            <Form.Group controlId="lat">
+              <Form.Label>Latitude</Form.Label>
+              <Form.Control
+                placeholder="Latitude coordinates in format: 48.198921"
+                value={lat}
+                onChange={handleFieldChange}
+                type="text"
+              />
+            </Form.Group>
+          </Col>
+          <Col>
+            <Form.Group controlId="lng">
+              <Form.Label>Longitude</Form.Label>
+              <Form.Control
+                placeholder="Longitude coordinates in format: 11.601885"
+                value={lng}
+                onChange={handleFieldChange}
+                type="text"
+              />
+            </Form.Group>
+          </Col>
+        </Row>
         <Form.Group controlId="file">
           <Form.Label>Attachment</Form.Label>
           <Form.Control onChange={handleFileChange} type="file" />
