@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { Form, Row, Col } from "react-bootstrap";
+import { Form, Row, Col, InputGroup } from "react-bootstrap";
 import { API } from "aws-amplify";
 
 import LoadingButton from "../../components/LoadingButton/LoadingButton";
@@ -23,11 +23,25 @@ export default function NewEntity() {
     lng: "",
     email: "",
     telephone: "",
+    twitter: "",
+    instgram: "",
+    facebook: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [lCountries, setCountries] = useState<any | any[]>([]);
   const [entities, setEntities] = useState<any | any[]>([]);
-  const { name, parent, country_name, email, lat, lng, telephone } = fields;
+  const {
+    name,
+    parent,
+    country_name,
+    email,
+    lat,
+    lng,
+    telephone,
+    twitter,
+    facebook,
+    instagram,
+  } = fields;
 
   useEffect(() => {
     async function loadCountries() {
@@ -98,6 +112,20 @@ export default function NewEntity() {
             contactHandle: telephone,
           },
         ],
+        channels: [
+          {
+            channelType: "twitter",
+            channelHandle: twitter,
+          },
+          {
+            channelType: "instagram",
+            channelHandle: instagram,
+          },
+          {
+            channelType: "facebook",
+            channelHandle: facebook,
+          },
+        ],
         location: {
           lat,
           lng,
@@ -151,6 +179,62 @@ export default function NewEntity() {
           <Form.Label>Telephone</Form.Label>
           <Form.Control value={telephone} onChange={handleFieldChange} type="tel" />
         </Form.Group>
+        <Form.Row>
+          <Form.Group as={Col} md="4" controlId="twitter">
+            <Form.Label>Twitter</Form.Label>
+            <InputGroup>
+              <InputGroup.Prepend>
+                <InputGroup.Text id="twitterPrepend">@</InputGroup.Text>
+              </InputGroup.Prepend>
+              <Form.Control
+                type="text"
+                value={twitter}
+                onChange={handleFieldChange}
+                placeholder="Twitter handle"
+                aria-describedby="twitterPrepend"
+              />
+              <Form.Control.Feedback type="invalid">
+                Please enter your Twitter handle.
+              </Form.Control.Feedback>
+            </InputGroup>
+          </Form.Group>
+          <Form.Group as={Col} md="4" controlId="instagram">
+            <Form.Label>Instagram</Form.Label>
+            <InputGroup>
+              <InputGroup.Prepend>
+                <InputGroup.Text id="instagramPrepend">@</InputGroup.Text>
+              </InputGroup.Prepend>
+              <Form.Control
+                type="text"
+                value={instagram}
+                onChange={handleFieldChange}
+                placeholder="Instagram handle"
+                aria-describedby="instagramPrepend"
+              />
+              <Form.Control.Feedback type="invalid">
+                Please enter your Instagram handle.
+              </Form.Control.Feedback>
+            </InputGroup>
+          </Form.Group>
+          <Form.Group as={Col} md="4" controlId="facebook">
+            <Form.Label>Facebook</Form.Label>
+            <InputGroup>
+              <InputGroup.Prepend>
+                <InputGroup.Text id="facebookPrepend">@</InputGroup.Text>
+              </InputGroup.Prepend>
+              <Form.Control
+                type="text"
+                value={facebook}
+                onChange={handleFieldChange}
+                placeholder="Facebook handle"
+                aria-describedby="facebookPrepend"
+              />
+              <Form.Control.Feedback type="invalid">
+                Please enter your Facebook handle.
+              </Form.Control.Feedback>
+            </InputGroup>
+          </Form.Group>
+        </Form.Row>
         <Row>
           <Col>
             <Form.Group controlId="lat">

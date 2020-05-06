@@ -1,13 +1,13 @@
 import React, { useRef, useState, useEffect, FormEvent } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import { Form, Row, Col } from "react-bootstrap";
+import { Form, Row, Col, InputGroup } from "react-bootstrap";
 import { API, Storage } from "aws-amplify";
 
 import LoadingButton from "../../components/LoadingButton/LoadingButton";
 import { onError } from "../../libs/error";
 import { s3Upload } from "../../libs/aws";
 import config from "../../config";
-import { IEntity } from "../../models/interfaces";
+import { IEntity, IChannel } from "../../models/interfaces";
 import { loadEntities } from "../../libs/apiEntities";
 const axios = require("axios");
 
@@ -22,6 +22,9 @@ export default function Entity() {
   const [telephone, setTelephone] = useState("");
   const [attachment, setAttachment] = useState("");
   const [location, setLocation] = useState({ lat: "", lng: "" });
+  const [twitter, setTwitter] = useState("");
+  const [instagram, setInstagram] = useState("");
+  const [facebook, setFacebook] = useState("");
   const [attachmentURL, setAttachmentURL] = useState("");
   const [entity, setEntity] = useState<IEntity | null>(null);
   const [parentName, setParentName] = useState("");
@@ -79,6 +82,26 @@ export default function Entity() {
         setCountryName(entity.country[0].countryName);
         setAttachmentURL(entity.attachmentURL);
         setAttachment(entity.attachment);
+
+        setTwitter(
+          entity.channels
+            ? entity.channels.find((channel: IChannel) => channel.channelType === "twitter")
+                .channelHandle
+            : ""
+        );
+        setInstagram(
+          entity.channels
+            ? entity.channels.find((channel: IChannel) => channel.channelType === "instagram")
+                .channelHandle
+            : ""
+        );
+        setFacebook(
+          entity.channels
+            ? entity.channels.find((channel: IChannel) => channel.channelType === "facebook")
+                .channelHandle
+            : ""
+        );
+
         setEmail(
           entity.contacts.find((contact: any) => contact.contactType === "email").contactHandle
         );
@@ -139,6 +162,21 @@ export default function Entity() {
         parentEntity = "";
       }
 
+      const channels = [
+        {
+          channelType: "twitter",
+          channelHandle: twitter,
+        },
+        {
+          channelType: "instagram",
+          channelHandle: instagram,
+        },
+        {
+          channelType: "facebook",
+          channelHandle: facebook,
+        },
+      ];
+
       const updateEntity = {
         name,
         parentId: parentEntity ? parentEntity.entityId : "",
@@ -154,6 +192,7 @@ export default function Entity() {
           },
         ],
         location,
+        channels,
         attachment: attachment || attach || null,
         attachmentURL,
       };
@@ -241,6 +280,62 @@ export default function Entity() {
               type="tel"
             />
           </Form.Group>
+          <Form.Row>
+            <Form.Group as={Col} md="4" controlId="twitter">
+              <Form.Label>Twitter</Form.Label>
+              <InputGroup>
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="twitterPrepend">@</InputGroup.Text>
+                </InputGroup.Prepend>
+                <Form.Control
+                  type="text"
+                  value={twitter}
+                  onChange={(e) => setTwitter(e.target.value)}
+                  placeholder="Twitter handle"
+                  aria-describedby="twitterPrepend"
+                />
+                <Form.Control.Feedback type="invalid">
+                  Please enter your Twitter handle.
+                </Form.Control.Feedback>
+              </InputGroup>
+            </Form.Group>
+            <Form.Group as={Col} md="4" controlId="instagram">
+              <Form.Label>Instagram</Form.Label>
+              <InputGroup>
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="instagramPrepend">@</InputGroup.Text>
+                </InputGroup.Prepend>
+                <Form.Control
+                  type="text"
+                  value={instagram}
+                  onChange={(e) => setInstagram(e.target.value)}
+                  placeholder="Instagram handle"
+                  aria-describedby="instagramPrepend"
+                />
+                <Form.Control.Feedback type="invalid">
+                  Please enter your Instagram handle.
+                </Form.Control.Feedback>
+              </InputGroup>
+            </Form.Group>
+            <Form.Group as={Col} md="4" controlId="facebook">
+              <Form.Label>Facebook</Form.Label>
+              <InputGroup>
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="facebookPrepend">@</InputGroup.Text>
+                </InputGroup.Prepend>
+                <Form.Control
+                  type="text"
+                  value={facebook}
+                  onChange={(e) => setFacebook(e.target.value)}
+                  placeholder="Facebook handle"
+                  aria-describedby="facebookPrepend"
+                />
+                <Form.Control.Feedback type="invalid">
+                  Please enter your Facebook handle.
+                </Form.Control.Feedback>
+              </InputGroup>
+            </Form.Group>
+          </Form.Row>
           <Row>
             <Col>
               <Form.Group controlId="lat">
