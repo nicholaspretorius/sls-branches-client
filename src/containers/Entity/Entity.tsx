@@ -1,14 +1,14 @@
 import React, { useRef, useState, useEffect, FormEvent } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import { Form } from "react-bootstrap";
+import { Form, Row, Col, InputGroup } from "react-bootstrap";
 import { API, Storage } from "aws-amplify";
 
 import LoadingButton from "../../components/LoadingButton/LoadingButton";
 import { onError } from "../../libs/error";
 import { s3Upload } from "../../libs/aws";
 import config from "../../config";
-// import { countries, countryList } from "../../models/data";
-import { IEntity } from "../../models/interfaces";
+import { IEntity, IChannel } from "../../models/interfaces";
+import { loadEntities } from "../../libs/apiEntities";
 const axios = require("axios");
 
 export default function Entity() {
@@ -19,9 +19,16 @@ export default function Entity() {
   const [name, setName] = useState("");
   const [country_name, setCountryName] = useState("");
   const [email, setEmail] = useState("");
+  const [telephone, setTelephone] = useState("");
   const [attachment, setAttachment] = useState("");
+  const [location, setLocation] = useState({ lat: "", lng: "" });
+  const [twitter, setTwitter] = useState("");
+  const [instagram, setInstagram] = useState("");
+  const [facebook, setFacebook] = useState("");
   const [attachmentURL, setAttachmentURL] = useState("");
   const [entity, setEntity] = useState<IEntity | null>(null);
+  const [parentName, setParentName] = useState("");
+  const [entities, setEntities] = useState<any | any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   // const [restCountries, setRestCountries] = useState<any | null>(null);
@@ -46,6 +53,17 @@ export default function Entity() {
           entity.attachmentURL = await Storage.vault.get(attachment);
         }
 
+        // Setup parent entity
+        const entities = await loadEntities();
+
+        let parentName: string;
+        if (entity.parentId) {
+          parentName = entities.filter((ent: IEntity) => ent.entityId === entity.parentId)[0].name;
+        } else {
+          parentName = "";
+        }
+
+        // Setup countries
         const rCountries = await loadCountries();
         const lCountries = rCountries.data.map((c: any) => {
           const country = {
@@ -57,13 +75,40 @@ export default function Entity() {
         });
         //  setRestCountries(rCountries.data);
         setCountries(lCountries);
-
+        setEntities(entities);
         setEntity(entity);
+        setParentName(parentName);
         setName(entity.name);
         setCountryName(entity.country[0].countryName);
         setAttachmentURL(entity.attachmentURL);
         setAttachment(entity.attachment);
-        setEmail(entity.contacts[0].contactHandle);
+
+        setTwitter(
+          entity.channels
+            ? entity.channels.find((channel: IChannel) => channel.channelType === "twitter")
+                .channelHandle
+            : ""
+        );
+        setInstagram(
+          entity.channels
+            ? entity.channels.find((channel: IChannel) => channel.channelType === "instagram")
+                .channelHandle
+            : ""
+        );
+        setFacebook(
+          entity.channels
+            ? entity.channels.find((channel: IChannel) => channel.channelType === "facebook")
+                .channelHandle
+            : ""
+        );
+
+        setEmail(
+          entity.contacts.find((contact: any) => contact.contactType === "email").contactHandle
+        );
+        setTelephone(
+          entity.contacts.find((contact: any) => contact.contactType === "telephone").contactHandle
+        );
+        setLocation(entity.location);
       } catch (e) {
         onError(e);
       }
@@ -110,15 +155,44 @@ export default function Entity() {
 
       const selectedCountry = lCountries.filter((c: any) => c.countryName === country_name);
 
+      let parentEntity;
+      if (parentName !== "") {
+        parentEntity = entities.filter((ent: any) => ent.name === parentName);
+      } else {
+        parentEntity = "";
+      }
+
+      const channels = [
+        {
+          channelType: "twitter",
+          channelHandle: twitter,
+        },
+        {
+          channelType: "instagram",
+          channelHandle: instagram,
+        },
+        {
+          channelType: "facebook",
+          channelHandle: facebook,
+        },
+      ];
+
       const updateEntity = {
         name,
+        parentId: parentEntity ? parentEntity.entityId : "",
         country: selectedCountry,
         contacts: [
           {
             contactType: "email",
             contactHandle: email,
           },
+          {
+            contactType: "telephone",
+            contactHandle: telephone,
+          },
         ],
+        location,
+        channels,
         attachment: attachment || attach || null,
         attachmentURL,
       };
@@ -166,6 +240,21 @@ export default function Entity() {
             <Form.Label>Branch Name</Form.Label>
             <Form.Control value={name} onChange={(e) => setName(e.target.value)} type="text" />
           </Form.Group>
+
+          <Form.Group controlId="parentName">
+            <Form.Label>Parent Entity</Form.Label>
+            <Form.Control
+              as="select"
+              value={parentName}
+              onChange={(e) => setParentName(e.target.value)}
+            >
+              <option>Please select</option>
+              {entities.map((entity: any) => (
+                <option key={entity.entityId}>{entity.name}</option>
+              ))}
+            </Form.Control>
+          </Form.Group>
+
           <Form.Group controlId="country_name">
             <Form.Label>Country</Form.Label>
             <Form.Control
@@ -183,6 +272,94 @@ export default function Entity() {
             <Form.Label>Email</Form.Label>
             <Form.Control value={email} onChange={(e) => setEmail(e.target.value)} type="email" />
           </Form.Group>
+          <Form.Group controlId="telephone">
+            <Form.Label>Telephone</Form.Label>
+            <Form.Control
+              value={telephone}
+              onChange={(e) => setTelephone(e.target.value)}
+              type="tel"
+            />
+          </Form.Group>
+          <Form.Row>
+            <Form.Group as={Col} md="4" controlId="twitter">
+              <Form.Label>Twitter</Form.Label>
+              <InputGroup>
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="twitterPrepend">@</InputGroup.Text>
+                </InputGroup.Prepend>
+                <Form.Control
+                  type="text"
+                  value={twitter}
+                  onChange={(e) => setTwitter(e.target.value)}
+                  placeholder="Twitter handle"
+                  aria-describedby="twitterPrepend"
+                />
+                <Form.Control.Feedback type="invalid">
+                  Please enter your Twitter handle.
+                </Form.Control.Feedback>
+              </InputGroup>
+            </Form.Group>
+            <Form.Group as={Col} md="4" controlId="instagram">
+              <Form.Label>Instagram</Form.Label>
+              <InputGroup>
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="instagramPrepend">@</InputGroup.Text>
+                </InputGroup.Prepend>
+                <Form.Control
+                  type="text"
+                  value={instagram}
+                  onChange={(e) => setInstagram(e.target.value)}
+                  placeholder="Instagram handle"
+                  aria-describedby="instagramPrepend"
+                />
+                <Form.Control.Feedback type="invalid">
+                  Please enter your Instagram handle.
+                </Form.Control.Feedback>
+              </InputGroup>
+            </Form.Group>
+            <Form.Group as={Col} md="4" controlId="facebook">
+              <Form.Label>Facebook</Form.Label>
+              <InputGroup>
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="facebookPrepend">@</InputGroup.Text>
+                </InputGroup.Prepend>
+                <Form.Control
+                  type="text"
+                  value={facebook}
+                  onChange={(e) => setFacebook(e.target.value)}
+                  placeholder="Facebook handle"
+                  aria-describedby="facebookPrepend"
+                />
+                <Form.Control.Feedback type="invalid">
+                  Please enter your Facebook handle.
+                </Form.Control.Feedback>
+              </InputGroup>
+            </Form.Group>
+          </Form.Row>
+          <Row>
+            <Col>
+              <Form.Group controlId="lat">
+                <Form.Label>Latitude</Form.Label>
+                <Form.Control
+                  placeholder="Latitude coordinates in format: 48.198921"
+                  value={location.lat}
+                  onChange={(e) => setLocation({ lat: e.target.value, lng: location.lng })}
+                  type="text"
+                />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group controlId="lng">
+                <Form.Label>Longitude</Form.Label>
+                <Form.Control
+                  placeholder="Longitude coordinates in format: 11.601885"
+                  value={location.lng}
+                  onChange={(e) => setLocation({ lat: location.lat, lng: e.target.value })}
+                  type="text"
+                />
+              </Form.Group>
+            </Col>
+          </Row>
           {entity.attachment && (
             <Form.Group>
               <Form.Label>Attachment: </Form.Label>

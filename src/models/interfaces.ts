@@ -9,6 +9,11 @@ export interface ICountry {
   countryId?: string;
 }
 
+export interface IChannel {
+  channelType: string;
+  channelHandle: string;
+}
+
 export interface IEntity {
   entityId: string;
   userId: string;
