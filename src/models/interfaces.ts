@@ -22,6 +22,7 @@ export interface IEntity {
   name: string;
   country: ICountry;
   contacts: IContact[];
+  website: string;
   attachment?: any,
   attachmentURL?: string,
 }
