@@ -25,6 +25,7 @@ export default function Entity() {
   const [twitter, setTwitter] = useState("");
   const [instagram, setInstagram] = useState("");
   const [facebook, setFacebook] = useState("");
+  const [website, setWebsite] = useState("");
   const [attachmentURL, setAttachmentURL] = useState("");
   const [entity, setEntity] = useState<IEntity | null>(null);
   const [parentName, setParentName] = useState("");
@@ -82,7 +83,7 @@ export default function Entity() {
         setCountryName(entity.country[0].countryName);
         setAttachmentURL(entity.attachmentURL);
         setAttachment(entity.attachment);
-
+        setWebsite(entity.website);
         setTwitter(
           entity.channels
             ? entity.channels.find((channel: IChannel) => channel.channelType === "twitter")
@@ -193,6 +194,7 @@ export default function Entity() {
         ],
         location,
         channels,
+        website,
         attachment: attachment || attach || null,
         attachmentURL,
       };
@@ -336,6 +338,10 @@ export default function Entity() {
               </InputGroup>
             </Form.Group>
           </Form.Row>
+          <Form.Group controlId="website">
+            <Form.Label>Website</Form.Label>
+            <Form.Control value={website} onChange={(e) => setWebsite(e.target.value)} type="url" />
+          </Form.Group>
           <Row>
             <Col>
               <Form.Group controlId="lat">

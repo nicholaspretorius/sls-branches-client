@@ -26,6 +26,7 @@ export default function NewEntity() {
     twitter: "",
     instgram: "",
     facebook: "",
+    website: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [lCountries, setCountries] = useState<any | any[]>([]);
@@ -41,6 +42,7 @@ export default function NewEntity() {
     twitter,
     facebook,
     instagram,
+    website,
   } = fields;
 
   useEffect(() => {
@@ -126,6 +128,7 @@ export default function NewEntity() {
             channelHandle: facebook,
           },
         ],
+        website,
         location: {
           lat,
           lng,
@@ -235,6 +238,10 @@ export default function NewEntity() {
             </InputGroup>
           </Form.Group>
         </Form.Row>
+        <Form.Group controlId="website">
+          <Form.Label>Website</Form.Label>
+          <Form.Control value={website} onChange={handleFieldChange} type="url" />
+        </Form.Group>
         <Row>
           <Col>
             <Form.Group controlId="lat">
