@@ -27,6 +27,11 @@ export default function NewEntity() {
     instgram: "",
     facebook: "",
     website: "",
+    address1: "",
+    address2: "",
+    cityTown: "",
+    areaState: "",
+    areaCode: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [lCountries, setCountries] = useState<any | any[]>([]);
@@ -43,6 +48,11 @@ export default function NewEntity() {
     facebook,
     instagram,
     website,
+    address1,
+    address2,
+    cityTown,
+    areaState,
+    areaCode,
   } = fields;
 
   useEffect(() => {
@@ -132,6 +142,13 @@ export default function NewEntity() {
         location: {
           lat,
           lng,
+        },
+        address: {
+          address1,
+          address2,
+          cityTown,
+          areaState,
+          areaCode,
         },
         attachment,
       };
@@ -266,6 +283,42 @@ export default function NewEntity() {
             </Form.Group>
           </Col>
         </Row>
+        <Form.Group controlId="address1">
+          <Form.Label>Address 1</Form.Label>
+          <Form.Control
+            placeholder="1234 Main St"
+            value={address1}
+            onChange={handleFieldChange}
+            type="text"
+          />
+        </Form.Group>
+
+        <Form.Group controlId="address2">
+          <Form.Label>Address 2</Form.Label>
+          <Form.Control
+            placeholder="Apartment, studio, or floor"
+            value={address2}
+            onChange={handleFieldChange}
+            type="text"
+          />
+        </Form.Group>
+
+        <Form.Row>
+          <Form.Group as={Col} controlId="cityTown">
+            <Form.Label>City</Form.Label>
+            <Form.Control value={cityTown} onChange={handleFieldChange} type="text" />
+          </Form.Group>
+
+          <Form.Group as={Col} controlId="areaState">
+            <Form.Label>State</Form.Label>
+            <Form.Control value={areaState} onChange={handleFieldChange} type="text" />
+          </Form.Group>
+
+          <Form.Group as={Col} controlId="areaCode">
+            <Form.Label>Zip/Area Code</Form.Label>
+            <Form.Control value={areaCode} onChange={handleFieldChange} type="text" />
+          </Form.Group>
+        </Form.Row>
         <Form.Group controlId="file">
           <Form.Label>Attachment</Form.Label>
           <Form.Control onChange={handleFileChange} type="file" />
