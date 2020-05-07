@@ -11,6 +11,14 @@ import { IEntity, IChannel } from "../../models/interfaces";
 import { loadEntities } from "../../libs/apiEntities";
 const axios = require("axios");
 
+const emptyAddress = {
+  address1: "",
+  address2: "",
+  cityTown: "",
+  areaState: "",
+  areaCode: "",
+};
+
 export default function Entity() {
   const file: any = useRef(null);
   const { id } = useParams();
@@ -26,6 +34,7 @@ export default function Entity() {
   const [instagram, setInstagram] = useState("");
   const [facebook, setFacebook] = useState("");
   const [website, setWebsite] = useState("");
+  const [address, setAddress] = useState(emptyAddress);
   const [attachmentURL, setAttachmentURL] = useState("");
   const [entity, setEntity] = useState<IEntity | null>(null);
   const [parentName, setParentName] = useState("");
@@ -110,6 +119,7 @@ export default function Entity() {
           entity.contacts.find((contact: any) => contact.contactType === "telephone").contactHandle
         );
         setLocation(entity.location);
+        setAddress(entity.address || emptyAddress);
       } catch (e) {
         onError(e);
       }
@@ -195,6 +205,7 @@ export default function Entity() {
         location,
         channels,
         website,
+        address,
         attachment: attachment || attach || null,
         attachmentURL,
       };
@@ -366,6 +377,96 @@ export default function Entity() {
               </Form.Group>
             </Col>
           </Row>
+
+          <Form.Group controlId="address1">
+            <Form.Label>Address 1</Form.Label>
+            <Form.Control
+              placeholder="1234 Main St"
+              value={address.address1}
+              onChange={(e) =>
+                setAddress({
+                  address1: e.target.value,
+                  address2: address.address2,
+                  cityTown: address.cityTown,
+                  areaState: address.areaState,
+                  areaCode: address.areaCode,
+                })
+              }
+              type="text"
+            />
+          </Form.Group>
+
+          <Form.Group controlId="address2">
+            <Form.Label>Address 2</Form.Label>
+            <Form.Control
+              placeholder="Apartment, studio, or floor"
+              value={address.address2}
+              onChange={(e) =>
+                setAddress({
+                  address1: address.address1,
+                  address2: e.target.value,
+                  cityTown: address.cityTown,
+                  areaState: address.areaState,
+                  areaCode: address.areaCode,
+                })
+              }
+              type="text"
+            />
+          </Form.Group>
+
+          <Form.Row>
+            <Form.Group as={Col} controlId="cityTown">
+              <Form.Label>City</Form.Label>
+              <Form.Control
+                value={address.cityTown}
+                onChange={(e) =>
+                  setAddress({
+                    address1: address.address1,
+                    address2: address.address2,
+                    cityTown: e.target.value,
+                    areaState: address.areaState,
+                    areaCode: address.areaCode,
+                  })
+                }
+                type="text"
+              />
+            </Form.Group>
+
+            <Form.Group as={Col} controlId="areaState">
+              <Form.Label>State</Form.Label>
+              <Form.Control
+                value={address.areaState}
+                onChange={(e) =>
+                  setAddress({
+                    address1: address.address1,
+                    address2: address.address2,
+                    cityTown: address.cityTown,
+                    areaState: e.target.value,
+                    areaCode: address.areaCode,
+                  })
+                }
+                type="text"
+              />
+            </Form.Group>
+
+            <Form.Group as={Col} controlId="areaCode">
+              <Form.Label>Zip/Area Code</Form.Label>
+              <Form.Control
+                value={address.areaCode}
+                onChange={(e) =>
+                  setAddress({
+                    address1: address.address1,
+                    address2: address.address2,
+                    cityTown: address.cityTown,
+                    areaState: address.areaState,
+                    areaCode: e.target.value,
+                  })
+                }
+                type="text"
+              />
+            </Form.Group>
+          </Form.Row>
+
           {entity.attachment && (
             <Form.Group>
               <Form.Label>Attachment: </Form.Label>
